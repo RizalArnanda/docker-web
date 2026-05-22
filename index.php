@@ -1,6 +1,6 @@
 <?php
-$host     = 'db';
-$dbname   = 'db_rizalarnanda';
+$host     = 'mysql';
+$dbname   = 'rizalarnanda';
 $username = 'root';
 $password = 'root';
 
