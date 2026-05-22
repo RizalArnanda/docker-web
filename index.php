@@ -492,16 +492,17 @@ $totalP   = $conn->query("SELECT COUNT(*) as c FROM mahasiswa WHERE jenis_kelami
   <div class="card">
     <div class="toolbar">
       <div class="toolbar-left">
-        <form method="GET" action="" style="display:contents;">
+        <form method="GET" action="" id="searchForm">
           <div class="search-wrap">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <input
-              type="text" name="search"
+              type="text" name="search" id="searchInput"
               placeholder="Cari nama atau NIM..."
               value="<?= htmlspecialchars($search) ?>"
-              oninput="this.form.submit()"
+              oninput="debounceSearch()"
+              autocomplete="off"
             />
           </div>
         </form>
@@ -677,6 +678,22 @@ $totalP   = $conn->query("SELECT COUNT(*) as c FROM mahasiswa WHERE jenis_kelami
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
+  });
+
+  // Debounce search — tunggu 400ms setelah berhenti ngetik
+  function debounceSearch() {
+    clearTimeout(window._searchTimer);
+    window._searchTimer = setTimeout(() => {
+      document.getElementById('searchForm').submit();
+    }, 400);
+  }
+
+  // Supaya Enter langsung cari tanpa nunggu debounce
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      clearTimeout(window._searchTimer);
+      document.getElementById('searchForm').submit();
+    }
   });
 
   // Buka modal otomatis kalau ada error supaya user tau
